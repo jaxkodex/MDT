@@ -4,15 +4,22 @@ var PopupView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'popup',
 	opened: false,
-	template: _.template('<div class="title"><%=title%></div><div class="body"><%=htmlBody%></div>'),
+	template: _.template('<div class="title"><%=title%></div><div class="body"></div>'),
+	title: 'Nueva Ventana',
 	initialize: function (opts) {
-		this.opts = opts || {
-			title: 'Nueva ventana',
-			htmlBody: ''
-		};
+		opts = opts || {};
+		this.view = opts.view;
+		this.title = opts.title;
 	},
 	render: function () {
-		this.$el.html(this.template(this.opts));
+		this.$el.html(this.template({ title: this.title, }));
+		if (this.view) {
+			this.view.render().$el.appendTo(this.$('.body'));
+		}
+		return this;
+	},
+	setTitle: function (title) {
+		this.title = title;
 		return this;
 	},
 	open: function () {
@@ -20,5 +27,6 @@ var PopupView = Backbone.View.extend({
 			this.render().$el.appendTo('body');
 		}
 		this.opened = true;
+		return this;
 	}
 });

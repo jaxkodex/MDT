@@ -15,11 +15,15 @@
 	<script type="text/javascript" src="js/backbone.js"></script>
 	<script type="text/javascript" src="js/kinetic-v5.1.0.min.js"></script>
 
-	<script type="text/javascript" src="js/app/model/TableModel.js"></script>
-	<script type="text/javascript" src="js/app/collection/TableCollection.js"></script>
-	<script type="text/javascript" src="js/app/view/ToolbarView.js"></script>
-	<script type="text/javascript" src="js/app/view/WorkspaceView.js"></script>
 	<script type="text/javascript" src="js/app/view/PopupView.js"></script>
+
+	<script type="text/javascript" src="js/app/model/TableModel.js"></script>
+	<script type="text/javascript" src="js/app/model/TableAttributeModel.js"></script>
+	<script type="text/javascript" src="js/app/collection/TableCollection.js"></script>
+	<script type="text/javascript" src="js/app/collection/TableAttributeCollection.js"></script>
+	<script type="text/javascript" src="js/app/view/ToolbarView.js"></script>
+	<script type="text/javascript" src="js/app/view/TableEditorView.js"></script>
+	<script type="text/javascript" src="js/app/view/WorkspaceView.js"></script>
 	<script type="text/javascript" src="js/app/canvas/table.js"></script>
 	<script type="text/javascript" src="js/app/setup.js"></script>
 </body>

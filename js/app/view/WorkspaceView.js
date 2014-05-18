@@ -43,5 +43,6 @@ var WorkspaceView = Backbone.View.extend({
 	addTableToWorkSpace: function (obj) {
 		obj.addToLayer(this.layer);
 		obj.reDraw();
+		obj.showTableEditor();
 	}
 });

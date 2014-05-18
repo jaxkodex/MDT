@@ -37,6 +37,14 @@ var TableModel = Backbone.Model.extend({
 		this.group.add(this.rec);
 		this.group.add(this.nameDivisor);
 		this.group.add(this.textName);
+
+		this.view = new TableEditorView({
+			model: this
+		});
+		this.popupWindow = new PopupView ({
+			view: this.view,
+			title: 'Nueva tabla'
+		});
 	},
 	addToLayer: function (layer) {
 		//layer.add(this.rec, this.textName);
@@ -48,5 +56,8 @@ var TableModel = Backbone.Model.extend({
 		//this.textName.draw();
 		this.group.draw();
 		return this;
+	},
+	showTableEditor: function () {
+		this.popupWindow.open();
 	}
 });
