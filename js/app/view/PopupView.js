@@ -4,12 +4,18 @@ var PopupView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'popup',
 	opened: false,
-	template: _.template('<div class="title"><%=title%></div><div class="body"></div>'),
+	template: _.template('<div class="title"><div class="close"></div><%=title%></div><div class="body"></div>'),
 	title: 'Nueva Ventana',
+	events: {
+		'click .close': 'close'
+	},
 	initialize: function (opts) {
 		opts = opts || {};
 		this.view = opts.view;
 		this.title = opts.title;
+		this.$el.draggable().css({
+			position: 'absolute'
+		});
 	},
 	render: function () {
 		this.$el.html(this.template({ title: this.title, }));
@@ -28,5 +34,12 @@ var PopupView = Backbone.View.extend({
 		}
 		this.opened = true;
 		return this;
+	},
+	close: function () {
+		//this.$el.remove();
+		this.remove();
+		this.trigger('close');
+		this.unbind();
+		this.opened = false;
 	}
 });

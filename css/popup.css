@@ -20,9 +20,20 @@ div.popup .title {
 	padding: 3px 5px 5px 17px;
 }
 
+div.popup .title .close {
+	background: url('../img/close2.png');
+	width: 20px;
+	height: 20px;
+	opacity: 0.6;
+}
+
 div.popup .body {
 	width: 498px;
 	height: 350px;
 	padding: 3px 5px 5px 5px;
 	overflow: auto;
+}
+
+div.popup .body * {
+	font-size: 12px;
 }
