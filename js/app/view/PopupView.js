@@ -13,15 +13,16 @@ var PopupView = Backbone.View.extend({
 		opts = opts || {};
 		this.view = opts.view;
 		this.title = opts.title;
-		this.$el.draggable().css({
-			position: 'absolute'
-		});
 	},
 	render: function () {
 		this.$el.html(this.template({ title: this.title, }));
+		this.delegateEvents();
 		if (this.view) {
 			this.view.render().$el.appendTo(this.$('.body'));
 		}
+		this.$el.draggable().css({
+			position: 'absolute'
+		});
 		return this;
 	},
 	setTitle: function (title) {

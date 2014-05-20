@@ -24,7 +24,9 @@ var TableModel = Backbone.Model.extend({
 		}
 	},
 	initialize: function () {
+		this.on('change', $.proxy(this.draw, this));
 		this.tableAttributes = new TableAttributeCollection(); // Table Attributes
+		this.is_hovered = false;
 		/*
 		this.rec = new Kinetic.Rect(this.toJSON());
 		this.textName = new Kinetic.Text({
@@ -70,28 +72,29 @@ var TableModel = Backbone.Model.extend({
 		//this.textName.draw();
 		var me = this;
 		this.group.destroyChildren();
+		this.group.getLayer().draw();
 
 		var tableName, rec, firstSeparator, firstSeparatorPos, textAttributes = [], 
 			maxTextWidth = 0, totalHeight = 0.5, xPadding = 10, yPadding = 2;
 
-		rec = new Kinetic.Rect (_.extend(this.get('tableDrawOptions'), {
+		rec = new Kinetic.Rect (_.extend({}, this.get('tableDrawOptions'), {
 			y: totalHeight
 		}));
 
 		totalHeight += 4.5;
-		tableName = new Kinetic.Text(_.extend(this.get('tableTextOptions'), {
+		tableName = new Kinetic.Text(_.extend({}, this.get('tableTextOptions'), {
 			text: this.get('tableName'),
 			y: totalHeight
 		}));
 		maxTextWidth = tableName.getTextWidth();
 		totalHeight += tableName.getTextHeight() +1;
 
-		firstSeparator = new Kinetic.Line(_.extend(this.get('lineOptions'), {}));
+		firstSeparator = new Kinetic.Line(_.extend({}, this.get('lineOptions')));
 		firstSeparatorPos = totalHeight; // store separator position
 
 		totalHeight += 3;
 		this.tableAttributes.each(function (obj, index) {
-			var text = new Kinetic.Text(_.extend(me.get('tableTextOptions'), {
+			var text = new Kinetic.Text(_.extend({}, me.get('tableTextOptions'), {
 				text: obj.get('attributeName'),
 				x: xPadding,
 				y: totalHeight
@@ -109,9 +112,41 @@ var TableModel = Backbone.Model.extend({
 			height: totalHeight
 		});
 
+		rec.on('mouseover', function () {
+			me.is_hovered = true;
+			me.reDraw();
+		});
+
 		tableName.x(rec.width()/2-tableName.getTextWidth()/2);
 
 		firstSeparator.points([0, firstSeparatorPos+0.5, rec.width(), firstSeparatorPos+0.5]);
+
+		if (this.is_hovered) {
+			var section = new Kinetic.Rect(this.get('tableDrawOptions')), 
+				editButton = new Kinetic.Rect(_.extend({}, this.get('tableDrawOptions'), {
+					fill: '#fff',
+					x: rec.width(),
+					y: 0.5,
+					width: 10.5,
+					height: 10.5
+				})),
+				cancelHover = function () {
+					me.is_hovered = false;
+					me.reDraw();
+				};
+			section.fill('#fff');
+			section.size({
+				width: rec.width() + 11,
+				height: rec.height() + 11
+			});
+			section.x(-5.5);
+			section.y(-5.5);
+			section.on('mouseout', cancelHover);
+			editButton.on('mouseout', cancelHover);
+			editButton.on('click', $.proxy(this.showTableEditor, this));
+			this.group.add(section);
+			this.group.add(editButton);
+		}
 
 		this.group.add(rec);
 		this.group.add(tableName);
