@@ -113,40 +113,15 @@ var TableModel = Backbone.Model.extend({
 		});
 
 		rec.on('mouseover', function () {
-			me.is_hovered = true;
-			me.reDraw();
+			if (!me.is_hovered) {
+				me.is_hovered = true;
+				me.reDraw();
+			}
 		});
 
 		tableName.x(rec.width()/2-tableName.getTextWidth()/2);
 
 		firstSeparator.points([0, firstSeparatorPos+0.5, rec.width(), firstSeparatorPos+0.5]);
-
-		if (this.is_hovered) {
-			var section = new Kinetic.Rect(this.get('tableDrawOptions')), 
-				editButton = new Kinetic.Rect(_.extend({}, this.get('tableDrawOptions'), {
-					fill: '#fff',
-					x: rec.width(),
-					y: 0.5,
-					width: 10.5,
-					height: 10.5
-				})),
-				cancelHover = function () {
-					me.is_hovered = false;
-					me.reDraw();
-				};
-			section.fill('#fff');
-			section.size({
-				width: rec.width() + 11,
-				height: rec.height() + 11
-			});
-			section.x(-5.5);
-			section.y(-5.5);
-			section.on('mouseout', cancelHover);
-			editButton.on('mouseout', cancelHover);
-			editButton.on('click', $.proxy(this.showTableEditor, this));
-			this.group.add(section);
-			this.group.add(editButton);
-		}
 
 		this.group.add(rec);
 		this.group.add(tableName);
@@ -155,6 +130,19 @@ var TableModel = Backbone.Model.extend({
 		_.each(textAttributes, function (obj) {
 			me.group.add(obj);
 		});
+
+		if (this.is_hovered) {
+			var editButton = new Kinetic.Circle({
+				radius: 11,
+				fill: '#fff',
+				strokeWidth: 1,
+				stroke: 'black',
+				x: maxTextWidth +2*xPadding +15,
+				y: 15
+			});
+			editButton.on('click', $.proxy(this.showTableEditor, this));
+			this.group.add(editButton);
+		}
 
 		this.group.draw();
 		return this;

@@ -17,6 +17,7 @@ var TableEditorView = Backbone.View.extend({
 			tableNameId: _.uniqueId('input_')
 		});
 		this.$el.html(this.template(table));
+		this.delegateEvents();
 		if (this.model.tableAttributes) {
 			this.model.tableAttributes.each(function (obj, index) {
 				var attributeView = new TableAttributeEditor ({
